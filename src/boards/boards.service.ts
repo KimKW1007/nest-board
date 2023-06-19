@@ -13,6 +13,10 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
+  async getAllBoards(): Promise<Board[]> {
+    return this.boardRepository.find({order:{id: "ASC",}});
+  }
+
   createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
     return this.boardRepository.createBoard(createBoardDto);
   }
@@ -32,9 +36,7 @@ export class BoardsService {
     }
   }
 
-  // getAllBoards(): Board[] {
-  //   return this.boards;
-  // }
+
 
   async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     const board = await this.getBoardById(id);
