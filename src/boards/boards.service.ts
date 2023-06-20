@@ -14,8 +14,11 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
-  async getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find({order:{id: "ASC",}});
+  async getAllBoards(user: User): Promise<Board[]> {
+    return this.boardRepository.find({
+      where: { user: { id: user.id } },
+      order: { id: 'ASC' },
+    });
   }
 
   createBoard(createBoardDto: CreateBoardDto, user: User): Promise<Board> {
@@ -37,14 +40,12 @@ export class BoardsService {
     }
   }
 
-
-
   async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     const board = await this.getBoardById(id);
 
     board.status = status;
     await this.boardRepository.save(board);
-    
+
     return board;
   }
 }
